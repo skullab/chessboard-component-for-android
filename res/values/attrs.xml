@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="Chessboard">
+		<attr name="whiteCellsColor" format="color"/>
+		<attr name="blackCellsColor" format="color"/>
+		<attr name="cellsSize" format="dimension"/>
+		<attr name="enableNotation" format="boolean"/>
+		<attr name="notationTextSize" format="dimension|float"/>
+		<attr name="notationTextColor" format="color"/>
+		<attr name="notationBackground" format="reference|color"/>
+	</declare-styleable>
+</resources>
