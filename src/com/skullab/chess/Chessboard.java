@@ -193,6 +193,7 @@ public class Chessboard extends LinearLayout {
 	private void styleable(AttributeSet attrs){
 		
 		TypedArray t = getContext().obtainStyledAttributes(attrs,com.skullab.chess.R.styleable.Chessboard);
+		boolean enable_notation = t.getBoolean(com.skullab.chess.R.styleable.Chessboard_enableNotation, true);
 		int white_cells_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_whiteCellsColor,com.skullab.chess.R.color.white);
 		int black_cells_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_blackCellsColor,com.skullab.chess.R.color.black);
 		int cells_size = (int)t.getDimension(com.skullab.chess.R.styleable.Chessboard_cellsSize,35);
@@ -207,6 +208,7 @@ public class Chessboard extends LinearLayout {
 			setNotationBackgroundColor(notation_color);
 		}
 		
+		enableNotation(enable_notation);
 		setWhiteCellsColor(white_cells_color);
 		setBlackCellsColor(black_cells_color);
 		setCellsSize(cells_size);

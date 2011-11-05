@@ -13,8 +13,7 @@
   		chessboard:cellsSize="15dp"
   		chessboard:whiteCellsColor="#f52c06"
   		chessboard:blackCellsColor="#c50c50"
-  		chessboard:notationTextSize="12sp"
+  		chessboard:notationTextSize="8sp"
   		chessboard:notationTextColor="#ff0000"
-  		chessboard:notationBackground="#fff"/> -->
-  		
+  		chessboard:notationBackground="#fff"/>-->
 </LinearLayout>
