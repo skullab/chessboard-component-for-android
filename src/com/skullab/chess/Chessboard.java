@@ -17,7 +17,10 @@ package com.skullab.chess;
 
 import java.util.ArrayList;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -31,12 +34,16 @@ import android.widget.TextView;
 /**
  * Displays a chessboard with (or without) notation around the board.
  * @author skullab.com
- * @attr rel com.skullab.chess.R.styleable.Chessboard_whiteCellsColor
+ * @attr rel com.skullab.chess.R.styleable.Chessaboard_enableNotation
+ * @attr rel com.skullab.chess.R.styleable.Chessboard_whiteCellsColor 
  * @attr rel com.skullab.chess.R.styleable.Chessboard_blackCellsColor
+ * @attr rel com.skullab.chess.R.styleable.Chessboard_whiteCellsBackground
+ * @attr rel com.skullab.chess.R.styleable.Chessboard_blackCellsBackground
  * @attr rel com.skullab.chess.R.styleable.Chessboard_cellsSize
  * @attr rel com.skullab.chess.R.styleable.Chessboard_notationTextSize
  * @attr rel com.skullab.chess.R.styleable.Chessboard_notationTextColor
  * @attr rel com.skullab.chess.R.styleable.Chessboard_notationBackground
+ * @attr rel com.skullab.chess.R.styleable.Chessboard_notationTypeface
  */
 public class Chessboard extends LinearLayout {
 	
@@ -193,24 +200,50 @@ public class Chessboard extends LinearLayout {
 	private void styleable(AttributeSet attrs){
 		
 		TypedArray t = getContext().obtainStyledAttributes(attrs,com.skullab.chess.R.styleable.Chessboard);
+		
 		boolean enable_notation = t.getBoolean(com.skullab.chess.R.styleable.Chessboard_enableNotation, true);
-		int white_cells_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_whiteCellsColor,com.skullab.chess.R.color.white);
-		int black_cells_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_blackCellsColor,com.skullab.chess.R.color.black);
 		int cells_size = (int)t.getDimension(com.skullab.chess.R.styleable.Chessboard_cellsSize,35);
 		float text_size = t.getDimension(com.skullab.chess.R.styleable.Chessboard_notationTextSize,12);
-		int text_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_notationTextColor,com.skullab.chess.R.color.white);
+		int text_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_notationTextColor,Color.WHITE);
+		String text_typeface = t.getString(com.skullab.chess.R.styleable.Chessboard_notationTypeface);
 		
+		if(text_typeface != null){
+			AssetManager am = this.getResources().getAssets();
+			Typeface type = Typeface.createFromAsset(am,text_typeface);
+			setNotationTypeface(type);
+		}
+		/*@deprecated
+		int white_cells_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_whiteCellsColor,com.skullab.chess.R.color.white);
+		int black_cells_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_blackCellsColor,com.skullab.chess.R.color.black);
+		setWhiteCellsColor(white_cells_color);
+		setBlackCellsColor(black_cells_color);*/
+		
+		// white cells background
+		Drawable w_c_b = t.getDrawable(com.skullab.chess.R.styleable.Chessboard_whiteCellsBackground);
+		if(w_c_b != null){
+			setWhiteCellsBackground(w_c_b);
+		}else{
+			int white_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_whiteCellsBackground, Color.WHITE);
+			setWhiteCellsBackground(white_color);
+		}
+		// black cells background
+		Drawable b_c_b = t.getDrawable(com.skullab.chess.R.styleable.Chessboard_blackCellsBackground);
+		if(b_c_b != null){
+			setBlackCellsBackground(b_c_b);
+		}else{
+			int black_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_blackCellsBackground, Color.BLACK);
+			setBlackCellsBackground(black_color);
+		}
+		// notation background
 		Drawable notation_drawable = t.getDrawable(com.skullab.chess.R.styleable.Chessboard_notationBackground);
 		if(notation_drawable != null){
 			setNotationBackground(notation_drawable);
 		}else{
-			int notation_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_notationBackground,com.skullab.chess.R.color.black);
+			int notation_color = t.getColor(com.skullab.chess.R.styleable.Chessboard_notationBackground,Color.BLACK);
 			setNotationBackgroundColor(notation_color);
 		}
 		
 		enableNotation(enable_notation);
-		setWhiteCellsColor(white_cells_color);
-		setBlackCellsColor(black_cells_color);
 		setCellsSize(cells_size);
 		setNotationTextSize(text_size);
 		setNotationTextColor(text_color);
@@ -228,6 +261,7 @@ public class Chessboard extends LinearLayout {
 	/**
 	 * Sets the "white cells" color
 	 * @param color
+	 * @deprecated Use {@link setWhiteCellsBackground} instead
 	 */
 	public void setWhiteCellsColor(int color){
 		for(int id : whiteCellsId){
@@ -238,11 +272,52 @@ public class Chessboard extends LinearLayout {
 	/**
 	 * Sets the "black cells" color
 	 * @param color
+	 * @deprecated Use {@link setBlackCellsBackground} instead
 	 */
 	public void setBlackCellsColor(int color){
 		for(int id : blackCellsId){
 			View v = chessboard.findViewById(id);
 			v.setBackgroundColor(color);
+		}
+	}
+	/**
+	 * Sets the "white cells" background color
+	 * @param color
+	 */
+	public void setWhiteCellsBackground(int color){
+		for(int id : whiteCellsId){
+			View v = chessboard.findViewById(id);
+			v.setBackgroundColor(color);
+		}
+	}
+	/**
+	 * Sets the "white cells" background drawable
+	 * @param d drawable
+	 */
+	public void setWhiteCellsBackground(Drawable d){
+		for(int id : whiteCellsId){
+			View v = chessboard.findViewById(id);
+			v.setBackgroundDrawable(d);
+		}
+	}
+	/**
+	 * Sets the "black cells" background color
+	 * @param color
+	 */
+	public void setBlackCellsBackground(int color){
+		for(int id : blackCellsId){
+			View v = chessboard.findViewById(id);
+			v.setBackgroundColor(color);
+		}
+	}
+	/**
+	 * Sets the "black cells" background drawable
+	 * @param d drawable
+	 */
+	public void setBlackCellsBackground(Drawable d){
+		for(int id : blackCellsId){
+			View v = chessboard.findViewById(id);
+			v.setBackgroundDrawable(d);
 		}
 	}
 	/**
@@ -306,6 +381,23 @@ public class Chessboard extends LinearLayout {
 				}
 			}else{
 				((TextView)v).setTextSize(size);
+			}
+		}
+	}
+	/**
+	 * Sets the text typeface of notation
+	 * @param type
+	 */
+	public void setNotationTypeface(Typeface type){
+		for(int id : notationId){
+			View v = chessboard.findViewById(id);
+			if(id == com.skullab.chess.R.id.notation_up || id == com.skullab.chess.R.id.notation_down){
+				for(int i = 0 ; i < 10 ; i++){
+					TextView tv = (TextView)((TableRow)v).getChildAt(i);
+					tv.setTypeface(type);
+				}
+			}else{
+				((TextView)v).setTypeface(type);
 			}
 		}
 	}
